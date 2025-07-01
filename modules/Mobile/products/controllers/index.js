@@ -1,26 +1,23 @@
-const productService = require("../services/productService");
-const productResource = require("../resources/productResource");
+const productRepository = require("../repositories");
+const productResource = require("../resources");
+const { successResponse, errorResponse } = require("../../base/response");
 
 async function index(req, res) {
   try {
-    const products = await productService.getAllProducts();
-    res.status(200).json({
-      success: true,
-      data: products.map(productResource),
-    });
+    const products = await productRepository.getAllProducts();
+    console.log(Hello);
+
+    const productResources = products.map(productResource);
+    successResponse(res, productResources, 200, "Index Success");
   } catch (error) {
-    console.error("Failed to fetch products:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-    });
+    errorResponse(res, 500, error, "Internal Server Error");
   }
 }
 
 async function show(req, res) {
   try {
     const productId = parseInt(req.params.id);
-    const product = await productService.getProductById(productId);
+    const product = await productRepository.getProductById(productId);
     if (!product) {
       return res.status(404).json({
         success: false,
@@ -44,7 +41,7 @@ async function show(req, res) {
 async function store(req, res) {
   const { categoryId, name, description } = req.body;
 
-  const newProduct = await productService.createProduct({
+  const newProduct = await productRepository.createProduct({
     categoryId,
     name,
     description,
@@ -60,7 +57,7 @@ async function store(req, res) {
 async function update(req, res) {
   const { id, categoryId, name, description } = req.body;
 
-  const updatedProduct = await productService.updateProduct({
+  const updatedProduct = await productRepository.updateProduct({
     id,
     categoryId,
     name,
@@ -83,7 +80,7 @@ async function update(req, res) {
 
 async function destroy(req, res) {
   const productId = parseInt(req.params.id);
-  const deletedProduct = await productService.softDeleteProduct(productId);
+  const deletedProduct = await productRepository.softDeleteProduct(productId);
 
   if (!deletedProduct) {
     return res.status(404).json({

@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const productController = require("../controllers/productController");
+const productController = require("../controllers");
 const {
   createProductValidator,
   updateProductValidator,
-} = require("../validators/productValidator");
-const validateRequest = require("../middleware/validateRequest");
-const auth = require("../middleware/auth");
+} = require("../validations");
+const validateRequest = require("../../base/validateRequest");
+const auth = require("../../base/auth");
 
 router.get("/", auth, productController.index);
 router.get("/:id", auth, productController.show);

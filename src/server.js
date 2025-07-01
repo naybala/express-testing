@@ -1,4 +1,4 @@
-const app = require("../config/app");
+const app = require("./app");
 const prisma = require("../config/db");
 
 (async () => {
