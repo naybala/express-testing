@@ -1,11 +1,12 @@
 const productService = require("../services/productService");
+const productResource = require("../resources/productResource");
 
 async function index(req, res) {
   try {
     const products = await productService.getAllProducts();
     res.status(200).json({
       success: true,
-      data: products,
+      data: products.map(productResource),
     });
   } catch (error) {
     console.error("Failed to fetch products:", error);
@@ -19,9 +20,7 @@ async function index(req, res) {
 async function show(req, res) {
   try {
     const productId = parseInt(req.params.id);
-
     const product = await productService.getProductById(productId);
-
     if (!product) {
       return res.status(404).json({
         success: false,

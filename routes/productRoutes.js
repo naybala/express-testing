@@ -6,20 +6,23 @@ const {
   updateProductValidator,
 } = require("../validators/productValidator");
 const validateRequest = require("../middleware/validateRequest");
+const auth = require("../middleware/auth");
 
-router.get("/", productController.index);
-router.get("/:id", productController.show);
+router.get("/", auth, productController.index);
+router.get("/:id", auth, productController.show);
 router.post(
   "/",
+  auth,
   createProductValidator,
   validateRequest,
   productController.store
 );
 router.put(
   "/",
+  auth,
   updateProductValidator,
   validateRequest,
   productController.update
 );
-router.delete("/:id", productController.destroy);
+router.delete("/:id", auth, productController.destroy);
 module.exports = router;

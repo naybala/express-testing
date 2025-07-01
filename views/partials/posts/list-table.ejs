@@ -8,13 +8,14 @@
     </thead>
     <tbody>
         <% posts.forEach(post=> { %>
-            <tr>
-                <td><%= post.id %></td>
-                <td><%= post.title %></td>
-                <td>
-                    <a class="text-blue-400 underline" href=<%= `/posts/${post.id}` %>>See Detail</a>
-                </td>
-            </tr>
+        <tr>
+            <td><%= post.id %></td>
+            <td><%= post.title %></td>
+            <td>
+                <a class="text-blue-400 underline" href=<%= `/posts/${post.id}`
+                    %>>See Detail</a>
+            </td>
+        </tr>
         <% }) %>
     </tbody>
 </table>

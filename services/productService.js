@@ -3,8 +3,12 @@ const prisma = require("../config/db");
 async function getAllProducts() {
   return await prisma.product.findMany({
     where: { deletedAt: null },
+    include: {
+      category: true,
+    },
   });
 }
+
 async function getProductById(id) {
   return await prisma.product.findFirst({
     where: {
@@ -25,7 +29,20 @@ async function getOtherProducts(excludeId) {
 }
 
 async function createProduct(data) {
-  return await prisma.product.create({ data });
+  return await prisma.$transaction(async (tx) => {
+    const product = await tx.product.create({ data });
+
+    // Example side effect: create log entry (optional)
+    // await tx.productLog.create({
+    //   data: {
+    //     productId: product.id,
+    //     action: 'created',
+    //     createdAt: new Date(),
+    //   },
+    // });
+
+    return product;
+  });
 }
 
 async function deleteProduct(id) {
@@ -35,11 +52,24 @@ async function deleteProduct(id) {
 }
 
 async function softDeleteProduct(id) {
-  return await prisma.product.update({
-    where: { id },
-    data: {
-      deletedAt: new Date(),
-    },
+  return await prisma.$transaction(async (tx) => {
+    const updated = await tx.product.update({
+      where: { id },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+
+    // Example: maybe log the deletion here
+    // await tx.productLog.create({
+    //   data: {
+    //     productId: id,
+    //     action: 'soft-deleted',
+    //     createdAt: new Date(),
+    //   },
+    // });
+
+    return updated;
   });
 }
 
