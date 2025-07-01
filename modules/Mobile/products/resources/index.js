@@ -1,4 +1,4 @@
-function productResource(product) {
+export default function productResource(product) {
   return {
     id: product.id,
     name: product.name,
@@ -12,5 +12,3 @@ function productResource(product) {
     deletedBy: product.deletedBy,
   };
 }
-
-module.exports = productResource;

@@ -1,28 +1,29 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const productController = require("../controllers");
-const {
+import {index,show,store,update,destroy} from "../controllers/index.js";
+
+import {
   createProductValidator,
   updateProductValidator,
-} = require("../validations");
-const validateRequest = require("../../base/validateRequest");
-const auth = require("../../base/auth");
+} from "../validations/index.js";
+import validateRequest from "../../base/validateRequest.js";
+import auth from "../../base/auth.js";
 
-router.get("/", auth, productController.index);
-router.get("/:id", auth, productController.show);
+router.get("/", auth, index);
+router.get("/:id", auth, show);
 router.post(
   "/",
   auth,
   createProductValidator,
   validateRequest,
-  productController.store
+  store
 );
 router.put(
   "/",
   auth,
   updateProductValidator,
   validateRequest,
-  productController.update
+  update
 );
-router.delete("/:id", auth, productController.destroy);
-module.exports = router;
+router.delete("/:id", auth, destroy);
+export default router;

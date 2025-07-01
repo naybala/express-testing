@@ -1,15 +1,15 @@
-const express = require("express");
+import express from "express";
 const app = express();
 
 app.use(express.json());
 
 // Use product routes with a base path
-const mobileRoutes = require("../routes/mobileApi");
+import mobileApi from "../routes/mobileApi.js";
 
 //Mobile
-app.use("/api/mobile", mobileRoutes);
+app.use("/api/mobile", mobileApi);
 //Spa
 
 //Web
 
-module.exports = app;
+export default app;

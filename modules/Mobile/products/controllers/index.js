@@ -1,12 +1,17 @@
-const productRepository = require("../repositories");
-const productResource = require("../resources");
-const { successResponse, errorResponse } = require("../../base/response");
+import {
+  getAllProducts,
+  getProductById,
+  createProduct,
+  getOtherProducts,
+  softDeleteProduct,
+  deleteProduct,
+} from "../repositories/index.js";
+import productResource from "../resources/index.js";
+import { successResponse, errorResponse } from "../../base/response.js";
 
-async function index(req, res) {
+export async function index(req, res) {
   try {
-    const products = await productRepository.getAllProducts();
-    console.log(Hello);
-
+    const products = await getAllProducts();
     const productResources = products.map(productResource);
     successResponse(res, productResources, 200, "Index Success");
   } catch (error) {
@@ -14,10 +19,10 @@ async function index(req, res) {
   }
 }
 
-async function show(req, res) {
+export async function show(req, res) {
   try {
     const productId = parseInt(req.params.id);
-    const product = await productRepository.getProductById(productId);
+    const product = await getProductById(productId);
     if (!product) {
       return res.status(404).json({
         success: false,
@@ -38,10 +43,10 @@ async function show(req, res) {
   }
 }
 
-async function store(req, res) {
+export async function store(req, res) {
   const { categoryId, name, description } = req.body;
 
-  const newProduct = await productRepository.createProduct({
+  const newProduct = await createProduct({
     categoryId,
     name,
     description,
@@ -54,10 +59,10 @@ async function store(req, res) {
   });
 }
 
-async function update(req, res) {
+export async function update(req, res) {
   const { id, categoryId, name, description } = req.body;
 
-  const updatedProduct = await productRepository.updateProduct({
+  const updatedProduct = await updateProduct({
     id,
     categoryId,
     name,
@@ -78,9 +83,9 @@ async function update(req, res) {
   });
 }
 
-async function destroy(req, res) {
+export async function destroy(req, res) {
   const productId = parseInt(req.params.id);
-  const deletedProduct = await productRepository.softDeleteProduct(productId);
+  const deletedProduct = await softDeleteProduct(productId);
 
   if (!deletedProduct) {
     return res.status(404).json({
@@ -94,11 +99,3 @@ async function destroy(req, res) {
     message: "Product deleted successfully",
   });
 }
-
-module.exports = {
-  index,
-  show,
-  store,
-  update,
-  destroy,
-};

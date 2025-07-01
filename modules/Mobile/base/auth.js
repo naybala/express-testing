@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET || "superSecretKey";
 
-function authenticate(req, res, next) {
+export default function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -18,5 +18,3 @@ function authenticate(req, res, next) {
     return res.status(403).json({ message: "Invalid token" });
   }
 }
-
-module.exports = authenticate;

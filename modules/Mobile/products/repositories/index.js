@@ -1,6 +1,6 @@
-const prisma = require("../../../../config/db");
+import prisma from "../../../../config/db.js";
 
-async function getAllProducts() {
+export async function getAllProducts() {
   return await prisma.product.findMany({
     where: { deletedAt: null },
     include: {
@@ -9,7 +9,7 @@ async function getAllProducts() {
   });
 }
 
-async function getProductById(id) {
+export async function getProductById(id) {
   return await prisma.product.findFirst({
     where: {
       id,
@@ -18,7 +18,7 @@ async function getProductById(id) {
   });
 }
 
-async function getOtherProducts(excludeId) {
+export async function getOtherProducts(excludeId) {
   return await prisma.product.findMany({
     where: {
       id: { not: excludeId },
@@ -28,7 +28,7 @@ async function getOtherProducts(excludeId) {
   });
 }
 
-async function createProduct(data) {
+export async function createProduct(data) {
   return await prisma.$transaction(async (tx) => {
     const product = await tx.product.create({ data });
 
@@ -45,13 +45,13 @@ async function createProduct(data) {
   });
 }
 
-async function deleteProduct(id) {
+export async function deleteProduct(id) {
   return await prisma.product.delete({
     where: { id },
   });
 }
 
-async function softDeleteProduct(id) {
+export async function softDeleteProduct(id) {
   return await prisma.$transaction(async (tx) => {
     const updated = await tx.product.update({
       where: { id },
@@ -72,12 +72,3 @@ async function softDeleteProduct(id) {
     return updated;
   });
 }
-
-module.exports = {
-  getAllProducts,
-  getProductById,
-  getOtherProducts,
-  createProduct,
-  deleteProduct,
-  softDeleteProduct,
-};
