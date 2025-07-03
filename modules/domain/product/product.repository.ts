@@ -3,15 +3,14 @@ import { baseRepository } from '../base/base.repository';
 import prisma from '../../../config/db';
 import { Product } from './type';
 
-const base = baseRepository(prisma.product);
+const base = baseRepository<Product>(prisma.product);
 
 export const productRepository: ProductRepositoryInterface = {
   ...base,
-  getNotDeletedRecords() : Promise<Product[]> {
+
+  getNotDeletedRecords: async (): Promise<Product[]> => {
     return prisma.product.findMany({
-      where: {
-        deletedAt: null,
-      }
-    })
-  }
+      where: { deletedAt: null },
+    });
+  },
 };
