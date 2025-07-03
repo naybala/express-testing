@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import productRoutes from "../modules/Mobile/products/routes/index";
+import productRoutes from "../modules/products/product.routes";
 
 const mobileRoutes: Router = express.Router();
 

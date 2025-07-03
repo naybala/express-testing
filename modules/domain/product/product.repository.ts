@@ -1,7 +1,7 @@
 import { ProductRepositoryInterface } from './productRepository.interface';
 import { baseRepository } from '../base/base.repository';
 import prisma from '../../../config/db';
-import { Product } from './type';
+import { Product } from '@prisma/client';
 
 const base = baseRepository<Product>(prisma.product);
 
@@ -13,4 +13,13 @@ export const productRepository: ProductRepositoryInterface = {
       where: { deletedAt: null },
     });
   },
+
+  getWithCategory: async () : Promise<Product[]> => {
+    return prisma.product.findMany({
+      where: { deletedAt: null },
+      include: {
+        category: true
+      }
+    })
+  }
 };
