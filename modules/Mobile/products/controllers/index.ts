@@ -28,23 +28,12 @@ export async function show(req: Request, res: Response): Promise<void> {
     const productId = parseInt(req.params.id);
     const product = await productRepository.getProductById(productId);
     if (!product) {
-      res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
+      errorResponse(res, 404, "Product not found");
       return;
     }
-
-    res.status(200).json({
-      success: true,
-      data: product,
-    });
+    successResponse(res, product);
   } catch (error) {
-    console.error("Error fetching product:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-    });
+    errorResponse(res, 500, error, "Internal server error");
   }
 }
 
@@ -58,11 +47,7 @@ export async function store(req: Request, res: Response): Promise<void> {
       description,
     });
 
-    res.status(201).json({
-      success: true,
-      message: "Product created successfully",
-      data: newProduct,
-    });
+    successResponse(res, newProduct, 201, "Product created successfully");
   } catch (error) {
     errorResponse(res, 500, error, "Failed to create product");
   }
@@ -74,24 +59,17 @@ export async function update(req: Request, res: Response): Promise<void> {
 
     const updatedProduct = await productRepository.updateProduct({
       id,
-      categoryId: categoryId ,
+      categoryId: categoryId,
       name,
       description,
     });
 
     if (!updatedProduct) {
-      res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
+      errorResponse(res, 404, "Product not found");
       return;
     }
 
-    res.status(200).json({
-      success: true,
-      message: "Product updated successfully",
-      data: updatedProduct,
-    });
+    successResponse(res, updatedProduct, 200, "Product updated successfully");
   } catch (error) {
     errorResponse(res, 500, error, "Failed to update product");
   }
@@ -103,17 +81,11 @@ export async function destroy(req: Request, res: Response): Promise<void> {
     const deletedProduct = await productRepository.softDeleteProduct(productId);
 
     if (!deletedProduct) {
-      res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
+      errorResponse(res, 404, "Product not found");
       return;
     }
 
-    res.status(200).json({
-      success: true,
-      message: "Product deleted successfully",
-    });
+    successResponse(res, null, 200, "Product deleted successfully");
   } catch (error) {
     errorResponse(res, 500, error, "Failed to delete product");
   }

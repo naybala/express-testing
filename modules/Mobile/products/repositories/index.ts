@@ -1,6 +1,6 @@
 import prisma from "../../../../config/db";
 import { Prisma } from "@prisma/client";
-import { Product } from "../types";
+import { Product } from "../../../domain/product/type";
 
 
 // Get all non-deleted products, including category
