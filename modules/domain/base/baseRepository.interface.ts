@@ -1,5 +1,5 @@
 export interface BaseRepositoryInterface<T> {
-  get(): Promise<T[]>;
+  get(options?: any): Promise<T[]>;
   find(id: number): Promise<T | null>;
   findByOtherField(otherField: string, value: any): Promise<T | null>;
   create(data: Partial<T>): Promise<T>;

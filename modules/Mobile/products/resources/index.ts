@@ -4,7 +4,14 @@ interface ProductWithCategory extends Product {
   category?: Category | null;
 }
 
-interface ProductResource {
+interface IndexProductInterface {
+  id: number,
+  name: string,
+  category: string | null,
+  createdAt: Date,
+}
+
+interface ShowProductInterface {
   id: number;
   name: string;
   category: string | null;
@@ -17,7 +24,16 @@ interface ProductResource {
   deletedBy: number | null;
 }
 
-function productResource(product: ProductWithCategory): ProductResource {
+export function indexProductResource(product: ProductWithCategory): IndexProductInterface {
+  return {
+    id: product.id,
+    name: product.name,
+    category: product.category?.name ?? null,
+    createdAt: product.createdAt,
+  };
+}
+
+export function showProductResource(product: ProductWithCategory): ShowProductInterface {
   return {
     id: product.id,
     name: product.name,
@@ -32,4 +48,3 @@ function productResource(product: ProductWithCategory): ProductResource {
   };
 }
 
-export default productResource;
