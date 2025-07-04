@@ -1,9 +1,7 @@
-import {Router} from 'express';
+import express,{Router} from "express"
+import productRoutes from "@web/products/routes/index"
+const webRoutes: Router = express.Router();
 
-const webApi : Router = Router();
+webRoutes.use("/products", productRoutes);
 
-webApi.use('/',(req,res)=>{
-    res.send('API WORKING');
-});
-
-export default webApi;
+export default webRoutes;

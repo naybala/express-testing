@@ -4,7 +4,7 @@ export function successResponse(
   res: Response,
   data: unknown = [],
   code: number = 200,
-  message: string = "Success For Mobile"
+  message: string = "Success For Web"
 ) {
   return res.status(code).json({
     success: true,

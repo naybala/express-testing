@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as baseResponse from "@mobile/base/response";
+import * as baseResponse from "@web/base/response";
 import * as productService from "../services";
 
 export const index = async (req: Request, res: Response): Promise<void> => {
