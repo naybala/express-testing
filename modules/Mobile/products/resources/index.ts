@@ -1,10 +1,10 @@
 import { Product, Category } from "@prisma/client";
 
-interface ProductWithCategory extends Product {
+export interface ProductWithCategory extends Product {
   category?: Category | null;
 }
 
-interface IndexProductInterface {
+export interface IndexProductInterface {
   id: number,
   name: string,
   category: string | null,
