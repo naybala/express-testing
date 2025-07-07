@@ -8,6 +8,7 @@ interface IndexProductInterface {
   id: number,
   name: string,
   category: string | null,
+  categoryId: number | null,
   createdAt: Date,
 }
 
@@ -29,6 +30,7 @@ export function indexProductResource(product: ProductWithCategory): IndexProduct
     id: product.id,
     name: product.name,
     category: product.category?.name ?? null,
+    categoryId: product.categoryId ?? null,
     createdAt: product.createdAt,
   };
 }
