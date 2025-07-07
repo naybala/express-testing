@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -9,7 +10,7 @@ datasource db {
 
 model Category {
   id          Int       @id @default(autoincrement())
-  name        String @unique
+  name        String    @unique
   description String?
   products    Product[]
   createdAt   DateTime  @default(now())
@@ -50,26 +51,28 @@ model User {
 }
 
 model Role {
-  id          Int              @id @default(autoincrement())
-  name        String           @unique
-  users       User[]
-  permissions String
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime?        @updatedAt
-  createdBy   Int?
-  updatedBy   Int?
-  deletedAt   DateTime?
-  deletedBy   Int?
+  id           Int         @id @default(autoincrement())
+  name         String      @unique
+  users        User[]
+  permissions  String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime?   @updatedAt
+  createdBy    Int?
+  updatedBy    Int?
+  deletedAt    DateTime?
+  deletedBy    Int?
+  Permission   Permission? @relation(fields: [permissionId], references: [id])
+  permissionId Int?
 }
 
 model Permission {
-  id          Int              @id @default(autoincrement())
-  name        String           @unique
-  roles       Role[]
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime?        @updatedAt
-  createdBy   Int?
-  updatedBy   Int?
-  deletedAt   DateTime?
-  deletedBy   Int?
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  roles     Role[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  createdBy Int?
+  updatedBy Int?
+  deletedAt DateTime?
+  deletedBy Int?
 }
