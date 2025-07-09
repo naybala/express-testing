@@ -3,10 +3,19 @@ const productResource = require("../resources/productResource");
 
 async function index(req, res) {
   try {
-    const products = await productService.getAllProducts();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
+    const products = await productService.getAllProducts(page, limit, search);
+    // console.log(products);
+
     res.status(200).json({
       success: true,
-      data: products.map(productResource),
+      data: products.data.map(productResource),
+      page: products.page,
+      limit: products.limit,
+      total: products.total,
+      totalPages: products.totalPages,
     });
   } catch (error) {
     console.error("Failed to fetch products:", error);

@@ -1,12 +1,43 @@
 const prisma = require("../config/db");
 
-async function getAllProducts() {
-  return await prisma.product.findMany({
-    where: { deletedAt: null },
-    include: {
-      category: true,
-    },
-  });
+async function getAllProducts(page = 1, limit = 10, search = "") {
+  const skip = (page - 1) * limit;
+
+  const searchCondition = search
+    ? {
+        OR: [
+          { name: { contains: search } },
+          { description: { contains: search } },
+        ],
+      }
+    : {};
+
+  const baseWhere = {
+    deletedAt: null,
+    ...searchCondition,
+  };
+
+  const [data, total] = await Promise.all([
+    prisma.product.findMany({
+      where: baseWhere,
+      skip,
+      take: limit,
+      include: {
+        category: true,
+      },
+    }),
+    prisma.product.count({
+      where: baseWhere,
+    }),
+  ]);
+
+  return {
+    data,
+    page,
+    limit,
+    total,
+    totalPages: Math.ceil(total / limit),
+  };
 }
 
 async function getProductById(id) {

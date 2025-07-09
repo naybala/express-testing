@@ -8,7 +8,10 @@ async function login(req, res) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
-  res.json({ token: result.token, user: result.user });
+  res.status(200).json({
+    success: true,
+    data: { user: result.user, token: result.token },
+  });
 }
 
 async function register(req, res) {
