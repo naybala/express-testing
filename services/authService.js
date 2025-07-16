@@ -5,11 +5,19 @@ const prisma = require("../config/db");
 const JWT_SECRET = process.env.JWT_SECRET || "superSecretKey";
 
 async function authenticateUser(email, password) {
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) return null;
+  //const user = await prisma.user.findUnique({ where: { email } });
 
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return null;
+  const user = prisma.user.findFirst({
+    where: {
+      deletedAt: null,
+    },
+  });
+  console.log(user);
+
+  // if (!user) return null;
+
+  // const isMatch = await bcrypt.compare(password, user.password);
+  // if (!isMatch) return null;
 
   const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1d" });
 

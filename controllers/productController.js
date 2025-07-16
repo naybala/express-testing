@@ -51,43 +51,54 @@ async function show(req, res) {
 }
 
 async function store(req, res) {
-  const { categoryId, name, description } = req.body;
+  const { categoryId, name, description, imageUrls } = req.body; // add imageUrls
 
-  const newProduct = await productService.createProduct({
-    categoryId,
-    name,
-    description,
-  });
+  try {
+    const newProduct = await productService.createProduct({
+      categoryId,
+      name,
+      description,
+      imageUrls, // pass imageUrls here
+    });
 
-  res.status(201).json({
-    success: true,
-    message: "Product created successfully",
-    data: newProduct,
-  });
+    res.status(201).json({
+      success: true,
+      message: "Product created successfully",
+      data: newProduct,
+    });
+  } catch (error) {
+    console.error("Error creating product:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
 }
 
 async function update(req, res) {
-  const { id, categoryId, name, description } = req.body;
+  const { id, categoryId, name, description, imageUrls } = req.body; // add imageUrls
 
-  const updatedProduct = await productService.updateProduct({
-    id,
-    categoryId,
-    name,
-    description,
-  });
-
-  if (!updatedProduct) {
-    return res.status(404).json({
-      success: false,
-      message: "Product not found",
+  try {
+    const updatedProduct = await productService.updateProduct(id, {
+      categoryId,
+      name,
+      description,
+      imageUrls, // pass imageUrls here
     });
-  }
 
-  res.status(200).json({
-    success: true,
-    message: "Product updated successfully",
-    data: updatedProduct,
-  });
+    if (!updatedProduct) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      data: updatedProduct,
+    });
+  } catch (error) {
+    console.error("Error updating product:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
 }
 
 async function destroy(req, res) {

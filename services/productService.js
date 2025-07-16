@@ -49,6 +49,13 @@ async function getProductById(id) {
   });
 }
 
+async function updateProduct(id, data) {
+  return await prisma.product.update({
+    where: { id },
+    data,
+  });
+}
+
 async function getOtherProducts(excludeId) {
   return await prisma.product.findMany({
     where: {
@@ -109,6 +116,7 @@ module.exports = {
   getProductById,
   getOtherProducts,
   createProduct,
+  updateProduct,
   deleteProduct,
   softDeleteProduct,
 };

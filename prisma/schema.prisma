@@ -24,10 +24,11 @@ model Product {
   id          Int       @id @default(autoincrement())
   categoryId  Int?
   category    Category? @relation(fields: [categoryId], references: [id]) 
-  name        String
+  name        String  @unique
   description String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
+  imageUrls   Json?   
   createdBy   Int?
   updatedBy   Int?
   deletedAt   DateTime?
@@ -40,7 +41,6 @@ model User {
   name     String?
   password String
   roleId   Int?
-  role     Role?   @relation(fields: [roleId], references: [id])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
   createdBy   Int?
@@ -49,37 +49,3 @@ model User {
   deletedBy   Int?
 }
 
-model Role {
-  id          Int          @id @default(autoincrement())
-  name        String       @unique
-  permissions Permission[] @relation("RolePermissions", references: [id])
-  users       User[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt
-  createdBy   Int?
-  updatedBy   Int?
-  deletedAt   DateTime?
-  deletedBy   Int?
-}
-
-model Permission {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique
-  roles       Role[]  @relation("RolePermissions", references: [id])
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt
-  createdBy   Int?
-  updatedBy   Int?
-  deletedAt   DateTime?
-  deletedBy   Int?
-}
-
-
-model RolePermission {
-  id           Int         @id @default(autoincrement())
-  roleId       Int
-  permissionId Int
-  role         Role       @relation(fields: [roleId], references: [id])
-  permission   Permission @relation(fields: [permissionId], references: [id])
-  @@unique([roleId, permissionId]) 
-}
