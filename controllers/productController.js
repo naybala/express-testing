@@ -52,7 +52,6 @@ async function show(req, res) {
 
 async function store(req, res) {
   const { categoryId, name, description, imageUrls } = req.body; // add imageUrls
-
   try {
     const newProduct = await productService.createProduct({
       categoryId,
