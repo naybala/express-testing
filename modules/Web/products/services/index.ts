@@ -23,6 +23,7 @@ export const get = async (
 
   const products = await productRepository
     .with("category:id,name")
+    .order("id", "asc")
     .getWithPaginate(page, limit, search);
 
   return {
