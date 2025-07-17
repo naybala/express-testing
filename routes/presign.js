@@ -5,8 +5,8 @@ const { v4: uuidv4 } = require("uuid");
 const router = express.Router();
 
 const s3Client = new S3Client({
-  region: "sgp1",
-  endpoint: "https://sgp1.digitaloceanspaces.com",
+  region: process.env.DIGITALOCEAN_SPACES_REGION,
+  endpoint: process.env.DIGITALOCEAN_SPACES_ENDPOINT,
   forcePathStyle: false,
   credentials: {
     accessKeyId: process.env.DIGITALOCEAN_SPACES_KEY,
