@@ -1,6 +1,6 @@
 import { body, ValidationChain } from "express-validator";
 
-export const createProductValidator: ValidationChain[] = [
+export const storeProductValidator: ValidationChain[] = [
   body("categoryId")
     .isInt()
     .withMessage("Category ID must be an integer"),

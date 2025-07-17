@@ -1,6 +1,8 @@
 import express, { Express } from "express";
-const app: Express = express();
+import { ddMiddleware } from "../middleware/ddMiddleware"
 
+const app: Express = express();
+app.use(ddMiddleware);
 app.use(express.json());
 
 // Use product routes with a base path

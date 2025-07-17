@@ -97,9 +97,7 @@ export const baseRepository = <TModel>(
       return result;
     },
     //Get data with pagination
-    async  getWithPaginate(page:number = 1, limit:number = 10, search:string | null = "") {
-      console.log(query.orderBy);
-      
+    async  getWithPaginate(page:number = 1, limit:number = 10, search:string | null = "") {      
       const skip = (page - 1) * limit;      
       const searchCondition = search
         ? {
@@ -155,7 +153,7 @@ export const baseRepository = <TModel>(
       return result;
     },
     //Create data
-    async create(data: Partial<TModel>) {
+    async create(data: Partial<TModel>) {      
       return model.create({ data });
     },
     //Update data by id

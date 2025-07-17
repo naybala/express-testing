@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { productRepository } from "@domain/product/product.repository";
 import { indexProductResource, IndexProductInterface } from "../resources";
+import { Product } from "@prisma/client";
 
 type ProductQueryParams = {
   page?: string;
@@ -8,6 +9,7 @@ type ProductQueryParams = {
   search?: string;
 };
 
+//  GET ALL with pagination
 export const get = async (
   req: Request<any, any, any, ProductQueryParams>
 ): Promise<{
@@ -33,4 +35,44 @@ export const get = async (
     total: products.total,
     totalPages: products.totalPages,
   };
+};
+
+//  GET SINGLE PRODUCT
+export const show = async (id: number): Promise<Product | null> => {
+  return productRepository.find(id);
+};
+
+//  CREATE PRODUCT
+export const store = async (
+  data: Partial<Product>
+): Promise<Product> => {
+  return productRepository.create(data);
+};
+
+//  UPDATE PRODUCT
+export const update = async (
+  data: Partial<Product>
+): Promise<Product | null> => {
+  const existing = await productRepository.find(Number(data.id));
+  if (!existing) return null;
+  return productRepository.update(Number(data.id), data);
+};
+
+//  DELETE PRODUCT (Soft Delete by default)
+export const softDelete = async (
+  id: number,
+  deletedBy?: number
+): Promise<Product | null> => {
+  const existing = await productRepository.find(id);
+  if (!existing) return null;
+
+  return productRepository.softDelete(id, deletedBy);
+};
+
+//  HARD DELETE (Permanent delete from the table no recover)
+export const hardDelete = async (id: number): Promise<Product | null> => {
+  const existing = await productRepository.find(id);
+  if (!existing) return null;
+
+  return productRepository.delete(id);
 };
