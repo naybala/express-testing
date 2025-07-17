@@ -84,6 +84,47 @@ export const baseRepository = <TModel>(
       return result;
     },
 
+    async  getWithPaginate(page:number = 1, limit:number = 10, search:string | null = "") {
+      const skip = (page - 1) * limit;
+      console.log(page, limit, search);
+      
+      const searchCondition = search
+        ? {
+            OR: [
+              { name: { contains: search } },
+              { description: { contains: search } },
+            ],
+          }
+        : {};
+
+      const baseWhere = {
+        deletedAt: null,
+        ...searchCondition,
+      };
+
+      const [data, total] = await Promise.all([
+        model.findMany({
+          where: baseWhere,
+          skip,
+          take: limit,
+          include: {
+            category: true,
+          },
+        }),
+        model.count({
+          where: baseWhere,
+        }),
+      ]);
+
+      return {
+        data,
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      };
+    },
+
     async first() {
       const result = await model.findFirst({
         where: query.where,

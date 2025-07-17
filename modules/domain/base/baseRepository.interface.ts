@@ -4,6 +4,7 @@ export interface BaseRepositoryInterface<T> {
   notDeleted(): BaseRepositoryInterface<T>;
   select(fields: string | string[]): BaseRepositoryInterface<T>; 
   get(): Promise<T[]>;
+  getWithPaginate(page?:number, limit?:number, search?:string | null): Promise<any>;
   first(): Promise<T | null>;
   find(id: number): Promise<T | null>;
   create(data: Partial<T>): Promise<T>;

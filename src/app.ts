@@ -11,7 +11,7 @@ import webApi from "../routes/webApi";
 //Mobile
 app.use("/api/mobile", mobileRoutes);
 //Spa
-app.use("/api/spa",spaApi)
+//app.use("/api/spa",spaApi)
 //Web
 app.use("/api/web",webApi);
 
