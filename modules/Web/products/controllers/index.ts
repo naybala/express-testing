@@ -25,6 +25,7 @@ export const index = async (req: Request, res: Response): Promise<void> => {
  * @access Authenticated 
  */
 export const store = async (req: Request, res: Response): Promise<void> => {
+  //dd("name : " +req.body.name);
   try {
     const newProduct = await productService.store(req.body);
     baseResponse.successResponse(res, newProduct, 201, "Product created");
