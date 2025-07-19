@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import * as baseResponse from "@web/base/response";
 import * as productService from "../services";
 import { dd } from '../../../../utils/dd';
+import { matchedData } from "express-validator";
 
 
 /**
@@ -25,9 +26,9 @@ export const index = async (req: Request, res: Response): Promise<void> => {
  * @access Authenticated 
  */
 export const store = async (req: Request, res: Response): Promise<void> => {
-  //dd("name : " +req.body.name);
   try {
-    const newProduct = await productService.store(req.body);
+    const validated = matchedData(req, { locations: ["body"] });
+    const newProduct = await productService.store(validated);
     baseResponse.successResponse(res, newProduct, 201, "Product created");
   } catch (error) {
     baseResponse.errorResponse(res, 500, error, "Failed to create product");
@@ -60,7 +61,8 @@ export const show = async (req: Request, res: Response): Promise<void> => {
  */
 export const update = async (req: Request, res: Response): Promise<void> => {
   try {
-    const updatedProduct = await productService.update(req.body);
+    const validated = matchedData(req, { locations: ["body"] });
+    const updatedProduct = await productService.update(validated);
     if (!updatedProduct) {
       baseResponse.errorResponse(res, 404, {}, "Product not found");
       return;

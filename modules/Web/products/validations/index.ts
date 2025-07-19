@@ -10,6 +10,10 @@ export const storeProductValidator: ValidationChain[] = [
   body("description")
     .notEmpty()
     .withMessage("Description is required"),
+  body("imageUrls")
+    .notEmpty()
+    .withMessage("Image is required"),
+  
 ];
 
 export const updateProductValidator: ValidationChain[] = [

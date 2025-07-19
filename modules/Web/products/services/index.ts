@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { productRepository } from "@domain/product/product.repository";
 import { indexProductResource, IndexProductInterface } from "../resources";
+import { showProductResource, ShowProductInterface } from "../resources/show";
 import { Product } from "@prisma/client";
 
 type ProductQueryParams = {
@@ -38,8 +39,9 @@ export const get = async (
 };
 
 //  GET SINGLE PRODUCT
-export const show = async (id: number): Promise<Product | null> => {
-  return productRepository.find(id);
+export const show = async (id: number): Promise<ShowProductInterface | null> => {
+  const product: Product | null = await productRepository.find(id);
+  return product ? showProductResource(product) : null;
 };
 
 //  CREATE PRODUCT

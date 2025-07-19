@@ -12,13 +12,6 @@ export interface IndexProductInterface {
   createdAt: Date,
 }
 
-interface ShowProductInterface {
-  id: number;
-  name: string;
-  category: string | null;
-  description: string | null;
- 
-}
 
 export function indexProductResource(product: ProductWithCategory): IndexProductInterface {
   return {
@@ -30,12 +23,4 @@ export function indexProductResource(product: ProductWithCategory): IndexProduct
   };
 }
 
-export function showProductResource(product: ProductWithCategory): ShowProductInterface {
-  return {
-    id: product.id,
-    name: product.name,
-    category: product.category?.name ?? null,
-    description: product.description,
-  };
-}
 
