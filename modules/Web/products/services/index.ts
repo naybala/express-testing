@@ -55,6 +55,8 @@ export const store = async (
 export const update = async (
   data: Partial<Product>
 ): Promise<Product | null> => {
+  console.log(data);
+  
   const existing = await productRepository.find(Number(data.id));
   if (!existing) return null;
   return productRepository.update(Number(data.id), data);

@@ -29,4 +29,7 @@ export const updateProductValidator: ValidationChain[] = [
   body("description")
     .notEmpty()
     .withMessage("Description is required"),
+  body("imageUrls")
+    .notEmpty()
+    .withMessage("Image is required"),
 ];
