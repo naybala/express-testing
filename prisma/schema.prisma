@@ -12,7 +12,7 @@ model Category {
   name        String
   description String?
   products    Product[] 
-  createdAt   DateTime  @default(now())
+  createdAt   DateTime?  @default(now())
   updatedAt   DateTime? @updatedAt
   createdBy   Int?
   updatedBy   Int?
@@ -26,7 +26,7 @@ model Product {
   category    Category? @relation(fields: [categoryId], references: [id]) 
   name        String  @unique
   description String?
-  createdAt   DateTime  @default(now())
+  createdAt   DateTime?  @default(now())
   updatedAt   DateTime? @updatedAt
   imageUrls   Json?   
   createdBy   Int?
@@ -36,13 +36,28 @@ model Product {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  name     String?
-  password String
-  roleId   Int?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  name       String?
+  password   String
+  roleId     Int?  
+  role       Role?    @relation(fields: [roleId], references: [id])
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+  createdBy   Int?
+  updatedBy   Int?
+  deletedAt   DateTime?
+  deletedBy   Int?
+}
+
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  description String?
+  users       User[]      
+  permissions   Json?   
+  createdAt   DateTime?    @default(now())
+  updatedAt   DateTime?    @updatedAt
   createdBy   Int?
   updatedBy   Int?
   deletedAt   DateTime?
