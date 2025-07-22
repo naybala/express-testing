@@ -18,7 +18,7 @@
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
-    "mini-express-generator": "^1.0.1",
+    "mini-express-generator": "^1.0.7",
     "nodemon": "^3.1.10",
     "uuid": "^11.1.0"
   },
