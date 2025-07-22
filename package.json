@@ -4,8 +4,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts"
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
+    "make-core-feature": "node ./node_modules/mini-express-generator/index.js"
   },
+
   "author": "",
   "license": "ISC",
   "description": "",
@@ -18,7 +20,7 @@
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
-    "mini-express-generator": "^1.0.7",
+    "mini-express-generator": "^1.0.8",
     "nodemon": "^3.1.10",
     "uuid": "^11.1.0"
   },
@@ -29,6 +31,8 @@
     "prisma": "^6.10.1",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "fs-extra": "^11.1.1",
+    "inquirer": "^9.0.0"
   }
 }
