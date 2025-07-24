@@ -6,7 +6,7 @@ export interface BaseRepositoryInterface<T> {
   order(field: string, direction?: 'asc' | 'desc'): BaseRepositoryInterface<T>;
   rawQuery(queryBuilder: (model: any) => Promise<any>): Promise<any>;
   get(): Promise<T[]>;
-  getWithPaginate(page?:number, limit?:number, search?:string | null): Promise<any>;
+  getWithPaginate(page?:number, limit?:number, search?:string | null, searchableFields?:string[]): Promise<any>;
   first(): Promise<T | null>;
   find(id: number): Promise<T | null>;
   create(data: Partial<T>): Promise<T>;

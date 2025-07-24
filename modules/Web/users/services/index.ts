@@ -3,14 +3,17 @@ import { userRepository } from "@domain/user/user.repository";
 import { indexUserResource, IndexUserInterface } from "../resources";
 import { showUserResource, ShowUserInterface } from "../resources/show";
 import { User } from "@prisma/client";
+import bcrypt from "bcryptjs";
+
 
 type UserQueryParams = {
   page?: string;
   limit?: string;
   search?: string;
+  fields?: string[]; 
 };
 
-//  GET ALL with pagination
+// GET ALL users with pagination
 export const get = async (
   req: Request<any, any, any, UserQueryParams>
 ): Promise<{
@@ -25,9 +28,9 @@ export const get = async (
   const search = req.query.search || "";
 
   const users = await userRepository
-    .with("role:id,name")
+    .with("role:id,name") // join with role, selecting only id and name
     .order("id", "asc")
-    .getWithPaginate(page, limit, search);
+    .getWithPaginate(page, limit, search, ["name", "email"]); 
 
   return {
     data: users.data.map(indexUserResource),
@@ -37,7 +40,6 @@ export const get = async (
     totalPages: users.totalPages,
   };
 };
-
 //  GET SINGLE User
 export const show = async (id: number): Promise<ShowUserInterface | null> => {
   const user: User | null = await userRepository.find(id);
@@ -48,17 +50,21 @@ export const show = async (id: number): Promise<ShowUserInterface | null> => {
 export const store = async (
   data: Partial<User>
 ): Promise<User> => {
-  return userRepository.create(data);
+    if (data.password) {
+      data.password = await bcrypt.hash(data.password, 10);
+    }
+    return userRepository.create(data);
 };
 
 //  UPDATE User
 export const update = async (
   data: Partial<User>
-): Promise<User | null> => {
-  console.log(data);
-  
+): Promise<User | null> => {  
   const existing = await userRepository.find(Number(data.id));
   if (!existing) return null;
+  if (data.password) {
+    data.password = await bcrypt.hash(data.password, 10);
+  }
   return userRepository.update(Number(data.id), data);
 };
 

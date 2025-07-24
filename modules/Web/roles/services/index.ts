@@ -8,6 +8,7 @@ type RoleQueryParams = {
   page?: string;
   limit?: string;
   search?: string;
+  fields?: string[]; 
 };
 
 // GET ALL with pagination
@@ -26,7 +27,7 @@ export const get = async (
 
   const roles = await roleRepository
     .order("id", "asc")
-    .getWithPaginate(page, limit, search);
+    .getWithPaginate(page, limit, search, ["name"]);
 
   return {
     data: roles.data.map(indexRoleResource),

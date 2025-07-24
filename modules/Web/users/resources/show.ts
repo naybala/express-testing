@@ -4,7 +4,7 @@ export interface ShowUserInterface {
   id: number;
   name: string;
   email?: string;
-  role?: string;
+  roleId?: number;
 }
 
 export function showUserResource(user: User): ShowUserInterface {
@@ -12,5 +12,6 @@ export function showUserResource(user: User): ShowUserInterface {
     id: user.id,
     name: user.name ?? '',
     email: user.email ?? '',
+    roleId: user.roleId ?? undefined,
   };
 }

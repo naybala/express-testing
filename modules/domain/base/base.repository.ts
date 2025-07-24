@@ -105,34 +105,48 @@ export const baseRepository = <TModel>(
   return result;
     },
     //Get data with pagination
-    async  getWithPaginate(page:number = 1, limit:number = 10, search:string | null = "") {      
-      const skip = (page - 1) * limit;      
-      const searchCondition = search
-        ? {
-            OR: [
-              { name: { contains: search } },
-              { description: { contains: search } },
-            ],
-          }
-        : {};
+    async getWithPaginate(
+      page: number = 1,
+      limit: number = 10,
+      search: string | null = "",
+      searchableFields: string[] = ["name", "description"]  
+    ) {
+    const skip = (page - 1) * limit;
+
+      const searchCondition =
+        search && searchableFields.length > 0
+          ? {
+              OR: searchableFields.map((field) => ({
+                [field]: { contains: search},
+              })),
+            }
+          : {};
 
       const baseWhere = {
         deletedAt: null,
         ...searchCondition,
       };
 
+      const queryOptions: any = {
+        where: baseWhere,
+        skip,
+        take: limit,
+      };
+
+      if (query.orderBy && Object.keys(query.orderBy).length > 0) {
+        queryOptions.orderBy = query.orderBy;
+      }
+
+      if (query.include && Object.keys(query.include).length > 0) {
+        queryOptions.include = query.include;
+      }
+
       const [data, total] = await Promise.all([
-        model.findMany({
-          where: baseWhere,
-          skip,
-          take: limit,
-          include: query.include || {},
-          orderBy: query.orderBy || {},
-        }),
-        model.count({
-          where: baseWhere,
-        }),
+        model.findMany(queryOptions),
+        model.count({ where: baseWhere }),
       ]);
+
+      resetQuery();
 
       return {
         data,
