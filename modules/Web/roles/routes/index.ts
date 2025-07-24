@@ -8,6 +8,7 @@ const router: Router = Router();
 
 router.get("/", authenticate, roleController.index);
 router.post("/get-all-permission",authenticate, roleController.getAllPermission);
+router.get("/get-all-roles",authenticate, roleController.getAllRole);
 router.get("/:id", authenticate, roleController.show);
 router.post(
   "/",

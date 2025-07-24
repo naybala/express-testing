@@ -36,12 +36,19 @@ export const baseRepository = <TModel>(
 
       if (Array.isArray(fields)) {
         fields.forEach((field) => {
-          query.select![field] = true;
+          query.select![field.trim()] = true;
         });
       } else {
-        query.select[fields] = true;
+        // Split comma-separated string
+        fields.split(",").forEach((field) => {
+          const trimmed = field.trim();
+          if (trimmed) {
+            query.select![trimmed] = true;
+          }
+        });
       }
-      return builder;
+
+    return builder; // assuming builder is your chainable context
     },
     //Include relations
     with(relations: string | string[]) {
@@ -78,23 +85,24 @@ export const baseRepository = <TModel>(
     },
     //Get all data
     async get() {
-      const queryOptions: any = {
-        where: query.where,
-      };
+  const queryOptions: any = {
+    where: query.where || {},
+  };
 
-      if (query.select && query.include) {
-        throw new Error('Cannot use both select and include in the same query.');
-      } else if (query.select) {
-        queryOptions.select = query.select;
-      } else if (query.include) {
-        queryOptions.include = query.include;
-      }else if (query.orderBy) {
-        queryOptions.orderBy = query.orderBy;
-      }
+  // Use only one: select or include (never both)
+  if (query.select && Object.keys(query.select).length > 0) {
+    queryOptions.select = query.select;
+  } else if (query.include && Object.keys(query.include).length > 0) {
+    queryOptions.include = query.include;
+  }
 
-      const result = await model.findMany(queryOptions);
-      resetQuery();
-      return result;
+  if (query.orderBy) {
+    queryOptions.orderBy = query.orderBy;
+  }
+
+  const result = await model.findMany(queryOptions);
+  resetQuery();
+  return result;
     },
     //Get data with pagination
     async  getWithPaginate(page:number = 1, limit:number = 10, search:string | null = "") {      

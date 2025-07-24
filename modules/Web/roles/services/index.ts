@@ -37,6 +37,12 @@ export const get = async (
   };
 };
 
+//GET ALl Role 
+export const getAllRole = async (): Promise<Role[]> => {
+  const roles = await roleRepository.select("id,name").get();
+  return roles;
+};
+
 // GET SINGLE
 export const show = async (id: number): Promise<ShowRoleInterface | null> => {
   const role: Role | null = await roleRepository.find(id);

@@ -19,7 +19,20 @@ export const index = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+export const getAllRole = async (req: Request, res: Response): Promise<void> => {
+  try{
+    const roles = await roleService.getAllRole();
+    baseResponse.successResponse(res, roles, 200);
+  }catch(error){
+    baseResponse.errorResponse(res, 500, error, "Failed to fetch roles");
+  }
+}
 
+/**
+ * @route POST /api/Web/roles/get-all-permission
+ * @description Get all permission
+ * @access Authenticated 
+ */
 export const getAllPermission = async (req: Request, res: Response): Promise<void> => {
   try {
     const permissions =  Permissions;    
