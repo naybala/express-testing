@@ -1,4 +1,4 @@
-export const permissions = [
+export const Permissions = [
     //Users
     'manage users',
     'create users',
